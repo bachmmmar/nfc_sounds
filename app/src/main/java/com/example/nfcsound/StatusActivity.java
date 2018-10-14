@@ -16,6 +16,7 @@ import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -45,17 +46,17 @@ public class StatusActivity extends AppCompatActivity {
 
 
         manager = ((NFCSoundManager)getApplicationContext());
-        manager.initializeApplication();
 
         image = findViewById(R.id.ivImage);
 
         setupNFC();
 
         if (!manager.isInitialized()) {
+            manager.initializeApplication();
             pinApp();
         }
 
-        showSoundAndImage("");
+        showImage();
     }
 
 
@@ -74,6 +75,9 @@ public class StatusActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    public void onClickRecent(View v) {
+        Log.i("Button", "Play Clicked");
+    }
 
     private void setupNFC() {
 
@@ -103,13 +107,17 @@ public class StatusActivity extends AppCompatActivity {
     }
 
 
-    public void showSoundAndImage(String sound_name) {
+    public void tagDetected(String text) {
         try {
-            manager.soundTagDetected(sound_name);
+            manager.soundTagDetected(text);
         } catch (Exception e) {
             Toast.makeText(this, e.toString(),Toast.LENGTH_SHORT).show();
         }
 
+        showImage();
+    }
+
+    public void showImage() {
         try {
             String path = manager.getImagePathToShow();
             image.setImageBitmap(getBitmapFromAssets(path));
@@ -163,18 +171,24 @@ public class StatusActivity extends AppCompatActivity {
         String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
         int languageCodeLength = payload[0] & 0063; // Get the Language Code, e.g. "en"
         // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
-
+        languageCodeLength=0;
         try {
             // Get the Text
             //text = new String(payload, languageCodeLength+1 , payload.length - languageCodeLength - 1, textEncoding);
             text = new String(payload, languageCodeLength, payload.length - languageCodeLength, textEncoding);
         } catch (UnsupportedEncodingException e) {
             Log.e(TAG_NFC,"UnsupportedEncoding: "+ e.toString());
+        } catch (StringIndexOutOfBoundsException e) {
+            Log.e(TAG_NFC,"Error while putting payload into string: "+ e.toString() + ", " + payload);
+            Log.e(TAG_NFC,"LanguageCodeLength: " + languageCodeLength);
+            Log.e(TAG_NFC,"TextEncoding: " + textEncoding);
+            Log.e(TAG_NFC,"PayloadLength: " + payload.length);
         }
 
         Toast.makeText(StatusActivity.this, "NFC Content: " + text,Toast.LENGTH_LONG).show();
         Log.e(TAG_NFC, "NFC Content: " + text );
-        showSoundAndImage(text);
+
+        tagDetected(text);
     }
 
 

@@ -3,26 +3,19 @@ package com.example.nfcsound;
 import android.app.Application;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
-import android.util.Log;
-import android.content.res.Resources;
-
+import android.os.Handler;
 
 import com.example.nfcsound.infra.DataPaths;
 import com.example.nfcsound.infra.PathFinder;
 
-import java.util.Arrays;
-import java.util.List;
-
 
 public class NFCSoundManager extends Application {
 
-    public static final int PLAYLIST_HISTORY_SIZE = 4;
-
-    private static final String TAG_PROGRAMM = "Program Flow";
-
     private static final String BASE_ASSETS_PATH = "nfc_name";
+    private static final String DEFAULT_TAG_TEXT = "nothing";
 
     private boolean is_initialized = false;
+    private boolean delayed_playing = false;
     private MediaPlayer media;
     private PathFinder path_finder;
 
@@ -31,7 +24,10 @@ public class NFCSoundManager extends Application {
     @Override
     public void onCreate () {
         super.onCreate();
-        initializeApplication();
+
+        path_finder = new PathFinder(getResources(), BASE_ASSETS_PATH);
+        media = new MediaPlayer();
+        active_name = path_finder.find(DEFAULT_TAG_TEXT);
     }
 
     public boolean isInitialized() {
@@ -39,18 +35,43 @@ public class NFCSoundManager extends Application {
     }
 
     public void initializeApplication() {
-        path_finder = new PathFinder(getResources(), BASE_ASSETS_PATH);
-        media = new MediaPlayer();
-        active_name = path_finder.find("dog");
         is_initialized = true;
     }
 
-    public void soundTagDetected(String sound_name) {
-        playSound();
+    public void soundTagDetected(String text) {
+        if (isPlaying()) {
+            return;
+        }
+
+        try {
+            active_name = path_finder.find(text);
+        } catch (Exception e) {
+            active_name = path_finder.find(DEFAULT_TAG_TEXT);
+            throw e;
+        } finally {
+            delayedPlaySound();
+        }
+    }
+
+    private boolean isPlaying() {
+        return media.isPlaying() || delayed_playing;
+    }
+
+    private void delayedPlaySound() {
+        delayed_playing = true;
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                delayed_playing = false;
+                playSound();
+            }
+        }, 300);
     }
 
     private void playSound() {
         try{
+            media = new MediaPlayer();
             AssetFileDescriptor descriptor = getResources().getAssets().openFd(active_name.getSoundPath());
             media.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength() );
             descriptor.close();

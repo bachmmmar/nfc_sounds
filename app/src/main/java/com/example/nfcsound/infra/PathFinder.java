@@ -39,8 +39,8 @@ public class PathFinder {
 
         String[] files = getFilesFromDirectory(name);
 
-        String[] audio_patterns = {".mp3"};
-        String[] image_patterns = {".jpg"};
+        String[] audio_patterns = {".mp3", ".wav"};
+        String[] image_patterns = {".jpg", ".png", ".gif"};
         ArrayList<String> audio = extractListWithMatchingEndings(files, audio_patterns);
         ArrayList<String> image = extractListWithMatchingEndings(files, image_patterns);
 
