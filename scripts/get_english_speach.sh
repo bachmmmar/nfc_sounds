@@ -20,8 +20,8 @@ AUDIO_POSTFIX=$(echo $LINE_WITH_URL | sed -e 's/.*data-src-mp3="//g' -e 's/" dat
 DESTINATION_DIR=${TARGET_DIR}/${WORD}/en_us/
 DESTINATION=$DESTINATION_DIR${WORD}.mp3
 SOURCE=$BASE_URL$AUDIO_POSTFIX
-mkdir -p $DESTINATION
+mkdir -p $DESTINATION_DIR
 
 echo "saving " $SOURCE " to " $DESTINATION
-wget -O $DESTINATION $SOURCE > /dev/null 2>&1
+wget -O $DESTINATION $SOURCE > /dev/null
 
