@@ -4,7 +4,9 @@ import android.app.Application;
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.os.Handler;
+import android.util.Log;
 
+import com.example.nfcsound.infra.DataManager;
 import com.example.nfcsound.infra.DataPaths;
 import com.example.nfcsound.infra.PathFinder;
 
@@ -17,7 +19,7 @@ public class NFCSoundManager extends Application {
     private boolean is_initialized = false;
     private boolean delayed_playing = false;
     private MediaPlayer media;
-    private PathFinder path_finder;
+    private DataManager data_manager;
 
     private DataPaths active_name;
 
@@ -25,9 +27,9 @@ public class NFCSoundManager extends Application {
     public void onCreate () {
         super.onCreate();
 
-        path_finder = new PathFinder(getResources(), BASE_ASSETS_PATH);
+        data_manager = new DataManager(getResources(), BASE_ASSETS_PATH);
         media = new MediaPlayer();
-        active_name = path_finder.find(DEFAULT_TAG_TEXT);
+        active_name = data_manager.find(DEFAULT_TAG_TEXT);
     }
 
     public boolean isInitialized() {
@@ -44,12 +46,12 @@ public class NFCSoundManager extends Application {
         }
 
         try {
-            active_name = path_finder.find(text);
+            active_name = data_manager.find(text);
         } catch (Exception e) {
-            active_name = path_finder.find(DEFAULT_TAG_TEXT);
+            active_name = data_manager.find(DEFAULT_TAG_TEXT);
             throw e;
         } finally {
-            delayedPlaySound();
+            delayedPlayVoice();
         }
     }
 
@@ -57,16 +59,35 @@ public class NFCSoundManager extends Application {
         return media.isPlaying() || delayed_playing;
     }
 
-    private void delayedPlaySound() {
+    private void delayedPlayVoice() {
         delayed_playing = true;
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 delayed_playing = false;
-                playSound();
+                playVoice();
             }
         }, 300);
+    }
+
+    private void playVoice() {
+        try {
+            media = new MediaPlayer();
+            AssetFileDescriptor descriptor = getResources().getAssets().openFd(active_name.getVoicePath());
+            media.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength() );
+            descriptor.close();
+            media.prepare();
+            Log.i("player", "start playing voice: "+ active_name.getVoicePath());
+            media.start();
+            media.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                public void onCompletion(MediaPlayer mp) {
+                    playSound();
+                }
+            });
+        } catch(Exception e){
+            // handle error here..
+        }
     }
 
     private void playSound() {
@@ -76,11 +97,13 @@ public class NFCSoundManager extends Application {
             media.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength() );
             descriptor.close();
             media.prepare();
+            Log.i("player", "start playing sound: "+ active_name.getSoundPath());
             media.start();
         } catch(Exception e){
             // handle error here..
         }
     }
+
 
     public String getImagePathToShow() {
         return active_name.getImagePath();
