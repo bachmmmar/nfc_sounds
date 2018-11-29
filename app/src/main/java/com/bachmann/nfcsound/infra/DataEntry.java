@@ -1,4 +1,4 @@
-package com.example.nfcsound.infra;
+package com.bachmann.nfcsound.infra;
 
 import java.util.Random;
 

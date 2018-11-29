@@ -1,4 +1,4 @@
-package com.example.nfcsound.infra;
+package com.bachmann.nfcsound.infra;
 
 class UnknownPathException extends RuntimeException {
     public UnknownPathException () {

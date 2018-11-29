@@ -1,4 +1,4 @@
-package com.example.nfcsound;
+package com.bachmann.nfcsound;
 
 import android.app.Application;
 import android.content.res.AssetFileDescriptor;
@@ -6,9 +6,8 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.Log;
 
-import com.example.nfcsound.infra.DataManager;
-import com.example.nfcsound.infra.DataPaths;
-import com.example.nfcsound.infra.PathFinder;
+import com.bachmann.nfcsound.infra.DataManager;
+import com.bachmann.nfcsound.infra.DataPaths;
 
 
 public class NFCSoundManager extends Application {

@@ -1,4 +1,4 @@
-package com.example.nfcsound;
+package com.bachmann.nfcsound;
 
 import android.app.Activity;
 import android.app.PendingIntent;

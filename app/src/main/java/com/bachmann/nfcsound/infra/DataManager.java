@@ -1,4 +1,4 @@
-package com.example.nfcsound.infra;
+package com.bachmann.nfcsound.infra;
 
 import android.content.res.Resources;
 import android.util.Log;

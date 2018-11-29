@@ -1,4 +1,4 @@
-package com.example.nfcsound.infra;
+package com.bachmann.nfcsound.infra;
 
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;

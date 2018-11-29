@@ -1,14 +1,10 @@
-package com.example.nfcsound.infra;
+package com.bachmann.nfcsound.infra;
 
 import android.content.res.Resources;
 
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class PathFinder {
 

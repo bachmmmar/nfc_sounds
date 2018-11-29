@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.nfcsound">
+    package="com.bachmann.nfcsound">
 
     <uses-permission android:name="android.permission.NFC" />
     <uses-feature android:name="android.hardware.nfc" android:required="true" />
 
     <application
-        android:name=".NFCSoundManager"
+        android:name="com.bachmann.nfcsound.NFCSoundManager"
         android:allowBackup="false"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name"
         android:theme="@style/AppTheme">
-        <activity android:name=".StatusActivity">
+        <activity android:name="com.bachmann.nfcsound.StatusActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
