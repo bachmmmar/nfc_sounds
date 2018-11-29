@@ -65,7 +65,7 @@ public class PathFinderTest {
 
     @Test
     public void findDogsPathWorks() {
-        PathFinder p = new PathFinder(InstrumentationRegistry.getTargetContext().getResources(),
+        PathFinder p = new PathFinder(InstrumentationRegistry.getContext().getResources(),
                 BASE_ASSETS_PATH);
         DataPaths d = p.find("dog");
 

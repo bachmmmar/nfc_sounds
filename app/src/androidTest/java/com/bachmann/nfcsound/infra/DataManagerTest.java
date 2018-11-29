@@ -38,12 +38,13 @@ public class DataManagerTest {
 
     @Test
     public void findDogsPathWorks() {
-        DataManager m = new DataManager(InstrumentationRegistry.getTargetContext().getResources(),
+        DataManager m = new DataManager(InstrumentationRegistry.getContext().getResources(),
                 BASE_ASSETS_PATH);
         DataPaths d = m.find("dog");
 
-        assertEquals(BASE_ASSETS_PATH + "/dog/images.jpg", d.getImagePath());
+        assertEquals(BASE_ASSETS_PATH + "/dog/hund_1.jpg", d.getImagePath());
         assertEquals(BASE_ASSETS_PATH + "/dog/hund_1.mp3", d.getSoundPath());
+        assertEquals(BASE_ASSETS_PATH + "/dog/en_us/dog.mp3", d.getVoicePath());
     }
 
 

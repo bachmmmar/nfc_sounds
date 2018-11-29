@@ -2,17 +2,12 @@ package com.bachmann.nfcsound.infra;
 
 import java.util.ArrayList;
 
-public class StickySizeLimitedList extends ArrayList<String> {
+public class SizeLimitedList extends ArrayList<String> {
 
     private int max_size;
-    private String [] sticky_part = new String[0];
 
-    public StickySizeLimitedList(int max_size) {
+    public SizeLimitedList(int max_size) {
         this.max_size = max_size;
-    }
-
-    public void setStickyPart(String [] part) {
-        sticky_part = part.clone();
     }
 
     @Override
@@ -34,21 +29,14 @@ public class StickySizeLimitedList extends ArrayList<String> {
             }
         }
 
-        for (String e : sticky_part) {
-            if (e.equals(value)) {
-                return true;
-            }
-        }
         return false;
     }
 
     public String [] getAllAsArray() {
-        int total_size = sticky_part.length + this.size();
-        String output[] = new String[total_size];
-        System.arraycopy(sticky_part,0,output,0,sticky_part.length);
+        String output[] = new String[this.size()];
 
         for (int i=0; i < this.size(); i++) {
-            output[i+sticky_part.length]= this.get(i);
+            output[i]= this.get(i);
         }
         return output;
     }

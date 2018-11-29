@@ -1,7 +1,9 @@
 package com.bachmann.nfcsound;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.ActivityInfo;
@@ -73,10 +75,6 @@ public class StatusActivity extends AppCompatActivity {
 
         Log.i(TAG_ACTIVITY, "Activity Pause");
         super.onPause();
-    }
-
-    public void onClickRecent(View v) {
-        Log.i("Button", "Play Clicked");
     }
 
     private void setupNFC() {
@@ -219,5 +217,26 @@ public class StatusActivity extends AppCompatActivity {
         adapter.enableForegroundDispatch(activity, pendingIntent, filters, techList);
     }
 
+    public void onClickRecent(View v) {
+        Log.i(TAG_ACTIVITY, "Recent Clicked");
+        showRecentPlaylistSelection();
+    }
+
+    private void showRecentPlaylistSelection(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(StatusActivity.this);
+        builder.setTitle(R.string.RecentlyPlayedDialogTitel)
+                .setItems(manager.getRecentlyPlayed(), new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                        String sound_name = manager.getRecentlyPlayed()[which];
+                        Log.i(TAG_ACTIVITY, sound_name + " playlist has been selected!");
+
+                        manager.soundTagDetected(sound_name);
+                        showImage();
+                    }
+                });
+        builder.create();
+        builder.show();
+    }
 
 }
