@@ -2,16 +2,4 @@
 <resources>
     <string name="app_name">NFCSound</string>
     <string name="nfc_mime_type">music/sound</string>
-    <string-array name="PlayersAvailable">
-        <item>Kueche</item>
-        <item>Kinderzimmer</item>
-        <item>Bad</item>
-        <item>Schlafzimmer</item>
-        <item>Wohnzimmer</item>
-    </string-array>
-    <string-array name="StickyPlaylist">
-        <item>Radio Top</item>
-        <item>Radio SRF3</item>
-    </string-array>
-    <string name="ServerAddress">http://192.168.1.2:9000</string>
 </resources>
