@@ -10,16 +10,16 @@ are targeting children with different ages from 1 to 10.
 For improvements, questions or ideas for further functionality contact me via Google Play. If you wanna extend current 
 library, or you are interested in implement further features do not hesitate, but please push changes.
 
-For manual how to create the Cards by your self see [How to get started](#How to get started).
+For manual how to create the Cards by your self see [How to get started](#how-to-get-started).
 
 ## Functionallity
 There are several NFC cards labled with e.g. a bear:
-<img src="./to_print/bear.png" width="250">
+<br><img src="./to_print/bear.png" width="250">
 
 Those NFC card are used to interact with the device. This is the unique feature of this app.
 
 If the user touches the back of the phone with a card, the according image is displayed immediately e.g. the bear:
-<img src="./app/src/main/assets/nfc_name/bear/19722.jpg" width="250">
+<br><img src="./app/src/main/assets/nfc_name/bear/19722.jpg" width="250">
 
 In parallel a voice tells you the name of the object on the card in this case "bear" in different languages followed 
 by the sound a bear makes "WUAAAHHH".
@@ -27,7 +27,7 @@ by the sound a bear makes "WUAAAHHH".
 This behaviour is called Explorer Mode.
 
 ## Modes
-Currently only one mode called [Explorer](###explorer) is implemented. There are other [features in planning](#Future Features).
+Currently only one mode called [Explorer](###explorer) is implemented. There are other [features in planning](#future-features).
 
 ### Explorer
 The explorer mode can be used by the youngest children (starting by age 1.5). Here all the NFC cards can be scanned
@@ -38,7 +38,19 @@ randomly. For each card a colored image of the object is shown on display and th
 2. Buy empty NFC cards in a online store of your choice. I bought them on Ebay <https://www.ebay.ch/sch/i.html?_nkw=292487267767>
 3. Get the [pdf](./to_print/etikett_main.pdf) with the labels from *to_print* directory which are prepared for [Avery 3659](https://www.avery-zweckform.com/produkt/universal-etiketten-3659).
 Or adapt the .tex file to match your labels available.
-
+4. Write the card identification to the NFC Cards
+    1. Get the [NFC Tools](https://play.google.com/) app from Google Play
+    2. Open the app and navigate to the Write section
+    3. Add a new Data set
+    4. Choose *Data* at the end of the List
+    5. Fill out the three fields as followed: 
+        ```
+        music/sound
+        bear
+        ```
+        The *bear* represents one of the folder names in *./app/src/main/assets/nfc_name* 
+    6. Write the data to the NFC card and add the according label 
+    7. Edit the Data set and continue with step v.
 
 
 # Future Features
