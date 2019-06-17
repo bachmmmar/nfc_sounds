@@ -22,16 +22,19 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.bachmann.nfcsound.infra.DataManager;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 
 
-public class StatusActivity extends AppCompatActivity {
+public class ExplorerGameActivity extends AppCompatActivity {
 
     private static final String TAG_NFC = "NFC TAG";
-    private static final String TAG_ACTIVITY = "StatusActivity";
+    private static final String TAG_ACTIVITY = "ExplorerGameActivity";
 
+    private AppStatus status;
     private NfcAdapter nfcAdapter;
     private NFCSoundManager manager;
 
@@ -43,20 +46,16 @@ public class StatusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_status);
+        setContentView(R.layout.activity_explorer_game);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-
-        manager = ((NFCSoundManager)getApplicationContext());
+        status = ((AppContainer) getApplicationContext()).getStatus();
+        DataManager dm = ((AppContainer)getApplicationContext()).getDataManager();
+        manager = new NFCSoundManager(getResources(), dm);
 
         image = findViewById(R.id.ivImage);
 
         setupNFC();
-
-        if (!manager.isInitialized()) {
-            manager.initializeApplication();
-            pinApp();
-        }
 
         showImage();
     }
@@ -77,31 +76,22 @@ public class StatusActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (status.isAppLocked()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
     private void setupNFC() {
 
         nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (nfcAdapter == null) {
-            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
-            finish();
-        }
-        else if(!nfcAdapter.isEnabled()){
-            Toast.makeText(this,
-                    "NFC NOT Enabled!",
-                    Toast.LENGTH_LONG).show();
-
-            startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
-        }
-
         readFromIntent(getIntent());
 
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
-    }
-
-
-    private void pinApp() {
-        startLockTask();
     }
 
 
@@ -183,7 +173,7 @@ public class StatusActivity extends AppCompatActivity {
             Log.e(TAG_NFC,"PayloadLength: " + payload.length);
         }
 
-        Toast.makeText(StatusActivity.this, "NFC Content: " + text,Toast.LENGTH_LONG).show();
+        Toast.makeText(ExplorerGameActivity.this, "NFC Content: " + text,Toast.LENGTH_LONG).show();
         Log.e(TAG_NFC, "NFC Content: " + text );
 
         tagDetected(text);
@@ -223,7 +213,7 @@ public class StatusActivity extends AppCompatActivity {
     }
 
     private void showRecentPlaylistSelection(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(StatusActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ExplorerGameActivity.this);
         builder.setTitle(R.string.RecentlyPlayedDialogTitel)
                 .setItems(manager.getRecentlyPlayed(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

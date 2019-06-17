@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="top">
+
+        <Switch
+            android:id="@+id/enableNFC"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_nfc_black_24dp"
+            android:onClick="onClickEnableDisableNFC"
+            android:textSize="@dimen/intro_screen_text_size"
+            android:text="@string/Switch_enableNFC" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <Switch
+            android:id="@+id/enablePinning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_lock_black_24dp"
+            android:onClick="onClickEnableDisablePinning"
+            android:textSize="@dimen/intro_screen_text_size"
+            android:text="@string/Switch_enablePinning" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="30dp" />
+
+        <Button
+            android:id="@+id/startGame"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_play_arrow_black_24dp"
+            android:onClick="onClickStartExplorerGame"
+            android:textSize="@dimen/intro_screen_text_size"
+            android:text="@string/Button_startGame" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <Button
+            android:id="@+id/writeCards"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_file_download_black_24dp"
+            android:onClick="onClickWriteCard"
+            android:textSize="@dimen/intro_screen_text_size"
+            android:text="@string/Button_writeCards" />
+    </LinearLayout>
+</android.support.constraint.ConstraintLayout>

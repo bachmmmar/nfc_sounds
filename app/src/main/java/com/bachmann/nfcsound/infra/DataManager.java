@@ -42,11 +42,27 @@ public class DataManager {
 
             ArrayList<String> voices = getAllSelectedVoices(name);
 
+            String line_drawing = getLineDrawing(name);
+
             data.add(new DataEntry(name,
                     images.toArray(new String[0]),
                     sounds.toArray(new String[0]),
-                    voices.toArray(new String[0])));
+                    voices.toArray(new String[0]),
+                    line_drawing));
         }
+    }
+
+    private String getLineDrawing(String name) {
+        ArrayList<String> line_drawing_path = new ArrayList<String>();
+        try {
+            line_drawing_path = getFilesFromDirectory(name + "/line_drawing" );
+        } catch (UnknownPathException e) {
+            Log.w("Line Drawing", "No drawing found for '" + name +"'found!");
+        }
+        if (line_drawing_path.size() >= 1) {
+            return line_drawing_path.get(0);
+        }
+        return "";
     }
 
     private ArrayList<String> getAllSelectedVoices(String name) {
@@ -76,6 +92,13 @@ public class DataManager {
         return output;
     }
 
+    public int size() {
+        return data.size();
+    }
+
+    public DataEntry get(int index) {
+        return data.get(index);
+    }
 
     public DataPaths find(String name) {
         if (name.isEmpty()) {

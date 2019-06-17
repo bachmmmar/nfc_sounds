@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ExplorerGameActivity -->
+    <string name="Button_recent">Last Sounds</string>
+    <string name="RecentlyPlayedDialogTitel">Chose sound to play</string>
+
+    <!-- IntroductionActivity -->
+    <string name="Switch_enableNFC">Enable NFC</string>
+    <string name="Switch_enablePinning">Pin App</string>
+    <string name="Button_startGame">Start Game</string>
+    <string name="Button_writeCards">Write NFC Cards</string>
+    <string name="NFC_instruction">Please activate/deactivate NFC and press Back to return to the application!</string>
+    <string name="NFC_disabled">NFC need to be enabled in order to proceed!</string>
+    <string name="Allert_NFCNotSupported_title">NFC Support</string>
+    <string name="Allert_NFCNotSupported_text">This device does not support NFC.</string>
+    <string name="Allert_NFCNotSupported_okButton">OK</string>
+
+    <!-- WriteCardActivity -->
+    <string name="Button_next">Next item</string>
+    <string name="Label_hint">Hold the NFC card to the back of the device.</string>
+    <string name="Label_currentItem">-</string>
+</resources>

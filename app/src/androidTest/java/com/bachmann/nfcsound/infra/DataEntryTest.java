@@ -21,7 +21,8 @@ public class DataEntryTest {
         String [] images = {"img1"};
         String [] sounds = {"s1"};
         String [] voices = {"v1"};
-        DataEntry e = new DataEntry("dummy", images, sounds, voices);
+        String line_drawing ="line";
+        DataEntry e = new DataEntry("dummy", images, sounds, voices, line_drawing);
 
         DataPaths n1 = e.getNext();
         DataPaths n2 = e.getNext();
@@ -33,13 +34,15 @@ public class DataEntryTest {
         assertEquals(n1.getImagePath(), images[0]);
         assertEquals(n1.getSoundPath(), sounds[0]);
         assertEquals(n1.getVoicePath(), voices[0]);
+        assertEquals(n1.getLineDrawingPath(), line_drawing);
     }
 
     public void gettingDataPathFromSeveralChoicesReturnsTheCorrect() {
         String [] images = {"img1", "img2"};
         String [] sounds = {"s1", "s2"};
         String [] voices = {"v1", "v2"};
-        DataEntry e = new DataEntry("dummy", images, sounds, voices);
+        String line_drawing ="line";
+        DataEntry e = new DataEntry("dummy", images, sounds, voices, line_drawing);
 
         DataPaths n0 = e.getNext();
         DataPaths n1 = e.getNext();
@@ -47,9 +50,11 @@ public class DataEntryTest {
         assertEquals(n0.getImagePath(), images[0]);
         assertEquals(n0.getSoundPath(), sounds[0]);
         assertEquals(n0.getVoicePath(), voices[0]);
+        assertEquals(n0.getLineDrawingPath(), line_drawing);
 
         assertEquals(n1.getImagePath(), images[1]);
         assertEquals(n1.getSoundPath(), sounds[1]);
         assertEquals(n1.getVoicePath(), voices[1]);
+        assertEquals(n1.getLineDrawingPath(), line_drawing);
     }
 }
