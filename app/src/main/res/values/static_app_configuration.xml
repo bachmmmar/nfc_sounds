@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">NFCSound</string>
-    <string name="nfc_mime_type">music/sound</string>
+    <string name="nfc_mime_type" translatable="false">music/sound</string>
     <dimen name="intro_screen_text_size">20sp</dimen>
 </resources>
