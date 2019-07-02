@@ -1,4 +1,4 @@
-package com.bachmann.nfcsound.infra;
+package com.bachmann.nfcsound;
 
 import android.app.PendingIntent;
 import android.content.Intent;
@@ -13,11 +13,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bachmann.nfcsound.AppContainer;
 import com.bachmann.nfcsound.AppStatus;
 import com.bachmann.nfcsound.R;
+import com.bachmann.nfcsound.infra.DataEntry;
+import com.bachmann.nfcsound.infra.DataEntryIterator;
+import com.bachmann.nfcsound.infra.DataManager;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,6 +37,7 @@ public class WriteCardActivity extends AppCompatActivity {
     private DataEntryIterator iterator;
 
     private ImageView image;
+    private TextView text;
 
     private DataEntry current_entry;
 
@@ -49,6 +54,7 @@ public class WriteCardActivity extends AppCompatActivity {
         manager = ((AppContainer) getApplicationContext()).getDataManager();
         iterator = new DataEntryIterator(manager);
         image = findViewById(R.id.currentItemImage);
+        text = findViewById(R.id.currentItemText);
 
         //setupNFC();
 
@@ -82,6 +88,7 @@ public class WriteCardActivity extends AppCompatActivity {
     }
 
     public void showImage() {
+        text.setText(current_entry.getNextName());
         String path = "";
         try {
             path = current_entry.getLineDrawingPath();

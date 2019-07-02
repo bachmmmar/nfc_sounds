@@ -39,6 +39,21 @@
 
         </LinearLayout>
 
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="3dp" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:inputType="none"
+            android:isScrollContainer="false"
+            android:singleLine="false"
+            android:text=""
+            android:textSize="22sp" />
+
         <ImageView
             android:id="@+id/ivImage"
             android:layout_width="match_parent"

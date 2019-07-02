@@ -1,21 +1,16 @@
 package com.bachmann.nfcsound;
 
-import android.app.ActivityManager;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.nfc.NfcAdapter;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Switch;
 import android.widget.Toast;
-
-import com.bachmann.nfcsound.infra.WriteCardActivity;
 
 public class IntroductionActivity extends AppCompatActivity {
 

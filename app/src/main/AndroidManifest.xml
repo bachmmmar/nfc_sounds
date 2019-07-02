@@ -41,7 +41,7 @@
                 android:resource="@xml/nfc_tech_filter" />
         </activity>
 
-        <activity android:name="com.bachmann.nfcsound.infra.WriteCardActivity">
+        <activity android:name="com.bachmann.nfcsound.WriteCardActivity">
             <intent-filter>
                 <action android:name="android.app.action.PROFILE_PROVISIONING_COMPLETE"/>
             </intent-filter>

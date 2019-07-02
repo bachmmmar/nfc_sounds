@@ -41,7 +41,8 @@ public class PathFinder {
         ArrayList<String> image = extractListWithMatchingEndings(files, image_patterns);
 
 
-        return new DataPaths(getRandomItem(audio), getRandomItem(image), "", "");
+        return new DataPaths(getRandomItem(audio), getRandomItem(image),
+                "", "", "");
     }
 
 

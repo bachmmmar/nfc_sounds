@@ -20,6 +20,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bachmann.nfcsound.infra.DataManager;
@@ -38,7 +39,8 @@ public class ExplorerGameActivity extends AppCompatActivity {
     private NfcAdapter nfcAdapter;
     private NFCSoundManager manager;
 
-    private ImageView image;
+    private ImageView displayed_image;
+    private TextView displayed_name;
 
     PendingIntent pendingIntent;
     Tag myTag;
@@ -53,7 +55,8 @@ public class ExplorerGameActivity extends AppCompatActivity {
         DataManager dm = ((AppContainer)getApplicationContext()).getDataManager();
         manager = new NFCSoundManager(getResources(), dm);
 
-        image = findViewById(R.id.ivImage);
+        displayed_image = findViewById(R.id.ivImage);
+        displayed_name = findViewById(R.id.tvName);
 
         setupNFC();
 
@@ -102,16 +105,22 @@ public class ExplorerGameActivity extends AppCompatActivity {
             Toast.makeText(this, e.toString(),Toast.LENGTH_SHORT).show();
         }
 
+        showName();
         showImage();
     }
 
     public void showImage() {
         try {
             String path = manager.getImagePathToShow();
-            image.setImageBitmap(getBitmapFromAssets(path));
+            displayed_image.setImageBitmap(getBitmapFromAssets(path));
         } catch (Exception e) {
             Toast.makeText(this, e.toString(),Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void showName() {
+        String n = manager.getNameToShow();
+        displayed_name.setText(n);
     }
 
     private Bitmap getBitmapFromAssets(String fileName) throws IOException {

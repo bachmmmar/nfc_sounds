@@ -74,7 +74,8 @@ public class DataEntry {
         return new DataPaths(
                 selectNextFromList(sounds, sounds_cnt),
                 selectNextFromList(images, images_cnt),
-                selectNextFromList(voices, voices_cnt), line_drawing);
+                selectNextFromList(voices, voices_cnt),
+                line_drawing, getNextName());
     }
 
     public String getName() {

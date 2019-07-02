@@ -17,7 +17,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_info_black_24dp"
-            android:editable="false"
             android:inputType="none"
             android:isScrollContainer="false"
             android:singleLine="false"
@@ -40,7 +39,9 @@
             android:id="@+id/currentItemText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/Label_currentItem"/>
+            android:gravity="center"
+            android:textSize="18sp"
+            android:text="@string/Label_currentItem" />
 
         <Space
             android:layout_width="match_parent"

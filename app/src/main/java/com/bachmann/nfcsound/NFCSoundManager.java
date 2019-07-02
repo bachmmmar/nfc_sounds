@@ -123,6 +123,10 @@ public class NFCSoundManager {
         return active_name.getImagePath();
     }
 
+    public String getNameToShow() {
+        return active_name.getName();
+    }
+
     public String[] getRecentlyPlayed() {
         return last_played.getAllAsArray();
     }
