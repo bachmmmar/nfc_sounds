@@ -14,7 +14,7 @@ public class AppContainer extends Application {
     public void onCreate () {
         super.onCreate();
         status = new AppStatus((ActivityManager)getSystemService(Context.ACTIVITY_SERVICE));
-        data_manager = new DataManager(getResources(), BASE_ASSETS_PATH);
+        data_manager = new DataManager(getApplicationContext(), BASE_ASSETS_PATH);
     }
 
     public AppStatus getStatus() {

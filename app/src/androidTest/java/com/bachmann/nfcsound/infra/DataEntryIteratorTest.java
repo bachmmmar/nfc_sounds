@@ -22,7 +22,7 @@ public class DataEntryIteratorTest {
 
     @Test(expected = IndexOutOfBoundsException.class)
     public void emptyDataManager_CausesOutOfBoundsException() {
-        DataManager m = new DataManager(InstrumentationRegistry.getTargetContext().getResources(),
+        DataManager m = new DataManager(InstrumentationRegistry.getTargetContext(),
                 "inexisting_path");
         DataEntryIterator dei = new DataEntryIterator(m);
 
@@ -31,24 +31,24 @@ public class DataEntryIteratorTest {
 
     @Test
     public void getNextReturnsAnotherEntry() {
-        DataManager m = new DataManager(InstrumentationRegistry.getTargetContext().getResources(),
+        DataManager m = new DataManager(InstrumentationRegistry.getTargetContext(),
                 BASE_ASSETS_PATH);
         DataEntryIterator dei = new DataEntryIterator(m);
 
         DataEntry de1 = dei.getNext();
         DataEntry de2 = dei.getNext();
-        assertNotEquals(de1.name, de2.name);
+        assertNotEquals(de1.getName(), de2.getName());
     }
 
 
     @Test
     public void getNextRestartsWhenEndReached() {
-        DataManager m = new DataManager(InstrumentationRegistry.getContext().getResources(),
+        DataManager m = new DataManager(InstrumentationRegistry.getContext(),
                 BASE_ASSETS_PATH);
         DataEntryIterator dei = new DataEntryIterator(m);
 
         DataEntry de1 = dei.getNext();
         DataEntry de2 = dei.getNext();
-        assertEquals(de1.name, de2.name);
+        assertEquals(de1.getName(), de2.getName());
     }
 }

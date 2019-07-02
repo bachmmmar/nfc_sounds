@@ -33,7 +33,7 @@ public class NFCSoundManager {
         resources = res;
         data_manager = dm;
         media = new MediaPlayer();
-        active_name = data_manager.find(DEFAULT_TAG_TEXT);
+        active_name = data_manager.find(DEFAULT_TAG_TEXT).getNext();
     }
 
     @Deprecated
@@ -52,10 +52,10 @@ public class NFCSoundManager {
         }
 
         try {
-            active_name = data_manager.find(text);
+            active_name = data_manager.find(text).getNext();
             last_played.add(text);
         } catch (Exception e) {
-            active_name = data_manager.find(DEFAULT_TAG_TEXT);
+            active_name = data_manager.find(DEFAULT_TAG_TEXT).getNext();
             throw e;
         } finally {
             delayedPlayVoice();
