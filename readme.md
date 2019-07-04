@@ -14,7 +14,7 @@ For manual how to create the Cards by your self see [How to get started](#how-to
 
 ## Functionallity
 There are several NFC cards labled with e.g. a bear:
-<br><img src="./to_print/bear.png" width="250">
+<br><img src="./app/src/main/assets/nfc_name/bear/line_drawing/bear.png" width="250">
 
 Those NFC card are used to interact with the device. This is the unique feature of this app.
 
@@ -24,7 +24,7 @@ If the user touches the back of the phone with a card, the according image is di
 In parallel a voice tells you the name of the object on the card in this case "bear" in different languages followed 
 by the sound a bear makes "WUAAAHHH".
 
-This behaviour is called Explorer Mode.
+This behaviour is called *Explorer Mode*.
 
 ## Modes
 Currently only one mode called [Explorer](###explorer) is implemented. There are other [features in planning](#future-features).
@@ -36,30 +36,16 @@ randomly. For each card a colored image of the object is shown on display and th
 # How to get started
 1. Get the [NFCSound](https://play.google.com/store/apps/details?id=com.bachmann.nfcsound) app from Google Play.
 2. Buy empty NFC cards in a online store of your choice. I bought them on Ebay <https://www.ebay.ch/sch/i.html?_nkw=292487267767>
-3. Get the [pdf](./to_print/etikett_main.pdf) with the labels from *to_print* directory which are prepared for [Avery 3659](https://www.avery-zweckform.com/produkt/universal-etiketten-3659).
+3. Get the [pdf](./to_print/etikett_main.pdf) with the labels from *to_print* directory which are prepared for [Avery 3659](https://www.avery-zweckform.com/produkt/universal-etiketten-3659). You can get the labels on Ebay <https://www.ebay.ch/sch/i.html?_nkw=161139167120>
 Or adapt the .tex file to match your labels available.
-4. Write the card identification to the NFC Cards
-    1. Get the [NFC Tools](https://play.google.com/) app from Google Play
-    2. Open the app and navigate to the Write section
-    3. Add a new Data set
-    4. Choose *Data* at the end of the List
-    5. Fill out the three fields as followed: 
-        ```
-        music/sound
-        bear
-        ```
-        The *bear* represents one of the folder names in *./app/src/main/assets/nfc_name* 
-    6. Write the data to the NFC card and add the according label 
-    7. Edit the Data set and continue with step v.
+4. Use the *Write NFC Cards* function to write the card identification to the according NFC Card.
 
 
 # Future Features
 
 ## Introduction Screen
 Add a screen which allows the user to:
- - Pin the app: Currently the app enforces pinning on start. There are problems when pinning is not enabled in System Configuration
  - Choose different Games / Modes
- - Write NFC cards: There would be no need for entering all the names in another app.
  - Language selection
 
 ## Memory
