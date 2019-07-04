@@ -58,6 +58,8 @@ public class ExplorerGameActivity extends AppCompatActivity {
         displayed_image = findViewById(R.id.ivImage);
         displayed_name = findViewById(R.id.tvName);
 
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
+
         setupNFC();
 
         showImage();
@@ -88,9 +90,6 @@ public class ExplorerGameActivity extends AppCompatActivity {
     }
 
     private void setupNFC() {
-
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        readFromIntent(getIntent());
 
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
@@ -136,56 +135,20 @@ public class ExplorerGameActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
-        readFromIntent(intent);
-        if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
-            myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        }
+        processIntent(intent);
     }
 
+    void processIntent(Intent intent) {
+        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        // only one message sent during the beam
+        NdefMessage msg = (NdefMessage) rawMsgs[0];
 
+        String name = new String(msg.getRecords()[0].getPayload());
 
-    private void readFromIntent(Intent intent) {
-        String action = intent.getAction();
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            NdefMessage[] msgs = null;
-            if (rawMsgs != null) {
-                msgs = new NdefMessage[rawMsgs.length];
-                for (int i = 0; i < rawMsgs.length; i++) {
-                    msgs[i] = (NdefMessage) rawMsgs[i];
-                }
-            }
-            buildTagViews(msgs);
-        }
-    }
-    private void buildTagViews(NdefMessage[] msgs) {
-        if (msgs == null || msgs.length == 0) return;
+        //Toast.makeText(ExplorerGameActivity.this, "NFC Content: " + name,Toast.LENGTH_LONG).show();
+        Log.i(TAG_NFC, "NFC Content: " + name );
 
-        String text = "";
-        byte[] payload = msgs[0].getRecords()[0].getPayload();
-        String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
-        int languageCodeLength = payload[0] & 0063; // Get the Language Code, e.g. "en"
-        // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
-        languageCodeLength=0;
-        try {
-            // Get the Text
-            //text = new String(payload, languageCodeLength+1 , payload.length - languageCodeLength - 1, textEncoding);
-            text = new String(payload, languageCodeLength, payload.length - languageCodeLength, textEncoding);
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG_NFC,"UnsupportedEncoding: "+ e.toString());
-        } catch (StringIndexOutOfBoundsException e) {
-            Log.e(TAG_NFC,"Error while putting payload into string: "+ e.toString() + ", " + payload);
-            Log.e(TAG_NFC,"LanguageCodeLength: " + languageCodeLength);
-            Log.e(TAG_NFC,"TextEncoding: " + textEncoding);
-            Log.e(TAG_NFC,"PayloadLength: " + payload.length);
-        }
-
-        Toast.makeText(ExplorerGameActivity.this, "NFC Content: " + text,Toast.LENGTH_LONG).show();
-        Log.e(TAG_NFC, "NFC Content: " + text );
-
-        tagDetected(text);
+        tagDetected(name);
     }
 
 
