@@ -17,6 +17,17 @@
 
     <!-- WriteCardActivity -->
     <string name="Button_next" translatable="false">Next item</string>
-    <string name="Label_hint" translatable="false">Hold the NFC card to the back of the device.</string>
+    <string name="Label_hint" translatable="false">Hold the NFC card to the back of the device to write identification.</string>
     <string name="Label_currentItem" translatable="false">-</string>
+
+    <string name="Hint_tagNotWritable" translatable="false">This tag is not writable</string>
+    <string name="Hint_tagNotSupported" translatable="false">This tag type is not supported</string>
+    <string name="Hint_tagNotSupportNDEF" translatable="false">Tag doesn\'t support NDEF.</string>
+    <string name="Hint_tagReadOnly" translatable="false">Tag is read-only</string>
+    <string name="Hint_tagFormatFailed" translatable="false">Failed to format tag.</string>
+    <string name="Hint_tagWriteFailed" translatable="false">Failed to write tag</string>
+    <string name="Hint_tagReadFailed" translatable="false">Failed to read tag</string>
+    <string name="Hint_tagToLessCapacity" translatable="false">Tag capacity is to small</string>
+    <string name="Hint_tagWriteSuccessful" translatable="false">Tag writing succeeded!</string>
+    <string name="Hint_tagWriteSuccessfulWithFormat" translatable="false">Tag formating and writing succeeded!</string>
 </resources>

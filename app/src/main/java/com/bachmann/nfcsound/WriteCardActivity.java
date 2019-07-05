@@ -35,7 +35,6 @@ public class WriteCardActivity extends AppCompatActivity {
     private static final String TAG_NFC = "NFC TAG";
     private static final String TAG_ACTIVITY = "WriteCardActivity";
 
-    private AppStatus status;
     private NfcAdapter nfcAdapter;
     private DataManager manager;
     private DataEntryIterator iterator;
@@ -45,16 +44,12 @@ public class WriteCardActivity extends AppCompatActivity {
 
     private DataEntry current_entry;
 
-    PendingIntent pendingIntent;
-    Tag myTag;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_card);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
-        status = ((AppContainer) getApplicationContext()).getStatus();
         manager = ((AppContainer) getApplicationContext()).getDataManager();
         iterator = new DataEntryIterator(manager);
         image = findViewById(R.id.currentItemImage);
@@ -80,11 +75,6 @@ public class WriteCardActivity extends AppCompatActivity {
         super.onResume();
         Log.i(TAG_ACTIVITY, "Activity Resume");
         setupForegroundDispatch(this, nfcAdapter);
-
-        // Check to see that the Activity started due to an Android Beam
-        if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(getIntent().getAction())) {
-            processIntent(getIntent());
-        }
     }
 
     @Override
@@ -96,27 +86,16 @@ public class WriteCardActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     public void onNewIntent(Intent intent) {
-        // onResume gets called after this to handle the intent
         setIntent(intent);
+        processIntent(getIntent());
     }
 
     /**
-     * Parses the NDEF Message from the intent and prints to the TextView
+     * Start Writing tag if intent appeared
      */
     void processIntent(Intent intent) {
-        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(
-                NfcAdapter.EXTRA_NDEF_MESSAGES);
-        // only one message sent during the beam
-        NdefMessage msg = (NdefMessage) rawMsgs[0];
-        // record 0 contains the MIME type, record 1 is the AAR, if present
-        text.setText(new String(msg.getRecords()[0].getPayload()));
-
-
-
-        //try writing
         Tag detectedTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
         if(supportedTechs(detectedTag.getTechList())) {
             // check if tag is writable (to the extent that we can
@@ -124,12 +103,12 @@ public class WriteCardActivity extends AppCompatActivity {
                 //writeTag here
                 WriteResponse wr = writeTag(getTagAsNdef(), detectedTag);
                 String message = (wr.getStatus() == 1? "Success: " : "Failed: ") + wr.getMessage();
-                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),message,Toast.LENGTH_LONG).show();
             } else {
-                Toast.makeText(getApplicationContext(),"This tag is not writable",Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(),getString(R.string.Hint_tagNotWritable), Toast.LENGTH_LONG).show();
             }
         } else {
-            Toast.makeText(getApplicationContext(),"This tag type is not supported",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),getString(R.string.Hint_tagNotSupported), Toast.LENGTH_LONG).show();
         }
 
     }
@@ -137,14 +116,7 @@ public class WriteCardActivity extends AppCompatActivity {
     private NdefMessage getTagAsNdef() {
         String nameToWrite = current_entry.getName();
         byte[] bytesToWrite = nameToWrite.getBytes(Charset.forName("UTF8"));
-        /*
-        byte[] uriField = uniqueId.getBytes(Charset.forName("US-ASCII"));
-        byte[] payload = new byte[uriField.length + 1];       //add 1 for the URI Prefix
-        payload[0] = 0x01;                        //prefixes http://www. to the URI
-        System.arraycopy(uriField, 0, payload, 1, uriField.length); //appends URI to payload
-        NdefRecord rtdUriRecord = new NdefRecord(
-                NdefRecord.TNF_MIME_MEDIA, NdefRecord.RTD_TEXT, new byte[0], payload);
-        */
+
         NdefRecord [] record = new NdefRecord[] {NdefRecord.createMime(getString(R.string.nfc_mime_type), bytesToWrite)};
 
         return new NdefMessage(record);
@@ -175,15 +147,13 @@ public class WriteCardActivity extends AppCompatActivity {
             if (ndef != null) {
                 ndef.connect();
                 if (!ndef.isWritable()) {
-                    return new WriteResponse(0,"Tag is read-only");
+                    return new WriteResponse(0, getString(R.string.Hint_tagReadOnly));
                 }
                 if (ndef.getMaxSize() < size) {
-                    mess = "Tag capacity is " + ndef.getMaxSize() + " bytes, message is " + size
-                            + " bytes.";
-                    return new WriteResponse(0,mess);
+                    return new WriteResponse(0,getString(R.string.Hint_tagToLessCapacity));
                 }
                 ndef.writeNdefMessage(message);
-                mess = "Wrote message to pre-formatted tag.";
+                mess = getString(R.string.Hint_tagWriteSuccessful) + " (" + current_entry.getName() +")";
                 return new WriteResponse(1,mess);
             } else {
                 NdefFormatable format = NdefFormatable.get(tag);
@@ -191,20 +161,17 @@ public class WriteCardActivity extends AppCompatActivity {
                     try {
                         format.connect();
                         format.format(message);
-                        mess = "Formatted tag and wrote message";
+                        mess = getString(R.string.Hint_tagWriteSuccessfulWithFormat) + " (" + current_entry.getName() +")";
                         return new WriteResponse(1,mess);
                     } catch (IOException e) {
-                        mess = "Failed to format tag.";
-                        return new WriteResponse(0,mess);
+                        return new WriteResponse(0, getString(R.string.Hint_tagFormatFailed));
                     }
                 } else {
-                    mess = "Tag doesn't support NDEF.";
-                    return new WriteResponse(0,mess);
+                    return new WriteResponse(0, getString(R.string.Hint_tagNotSupportNDEF));
                 }
             }
         } catch (Exception e) {
-            mess = "Failed to write tag";
-            return new WriteResponse(0,mess);
+            return new WriteResponse(0, getString(R.string.Hint_tagWriteFailed));
         }
     }
 
@@ -234,7 +201,7 @@ public class WriteCardActivity extends AppCompatActivity {
             if (ndef != null) {
                 ndef.connect();
                 if (!ndef.isWritable()) {
-                    Toast.makeText(getApplicationContext(),"Tag is read-only.",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), getString(R.string.Hint_tagReadOnly),Toast.LENGTH_LONG).show();
                     ndef.close();
                     return false;
                 }
@@ -242,7 +209,7 @@ public class WriteCardActivity extends AppCompatActivity {
                 return true;
             }
         } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),"Failed to read tag",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), getString(R.string.Hint_tagReadFailed),Toast.LENGTH_LONG).show();
         }
         return false;
     }
@@ -277,14 +244,14 @@ public class WriteCardActivity extends AppCompatActivity {
     }
 
 
-
     public static void setupForegroundDispatch(final Activity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
         final PendingIntent pendingIntent = PendingIntent.getActivity(activity.getApplicationContext(), 0, intent, 0);
 
-        adapter.enableForegroundDispatch(activity, pendingIntent, null, null); //ended up setting mFilters and mTechLists to null
+        //ended up setting mFilters and mTechLists to null --> all cards get handled inside this activity
+        adapter.enableForegroundDispatch(activity, pendingIntent, null, null);
     }
 
     public static void stopForegroundDispatch(final Activity activity, NfcAdapter adapter) {
