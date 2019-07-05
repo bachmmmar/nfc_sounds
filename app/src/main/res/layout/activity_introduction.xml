@@ -41,10 +41,11 @@
             android:id="@+id/startGame"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/colorAccent"
             android:drawableStart="@drawable/ic_play_arrow_black_24dp"
             android:onClick="onClickStartExplorerGame"
-            android:textSize="@dimen/intro_screen_text_size"
-            android:text="@string/Button_startGame" />
+            android:text="@string/Button_startGame"
+            android:textSize="@dimen/intro_screen_text_size" />
 
         <Space
             android:layout_width="match_parent"
@@ -56,7 +57,17 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_file_download_black_24dp"
             android:onClick="onClickWriteCard"
-            android:textSize="@dimen/intro_screen_text_size"
-            android:text="@string/Button_writeCards" />
+            android:text="@string/Button_writeCards"
+            android:textSize="@dimen/intro_screen_text_size" />
+
+        <Space
+            android:layout_width="match_parent"
+            android:layout_height="20dp" />
+
+        <VideoView
+            android:id="@+id/videoView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@android:color/background_light" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>
