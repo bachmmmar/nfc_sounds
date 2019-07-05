@@ -27,7 +27,6 @@ import com.bachmann.nfcsound.infra.DataManager;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 
 public class ExplorerGameActivity extends AppCompatActivity {
