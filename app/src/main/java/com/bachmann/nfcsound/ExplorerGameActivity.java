@@ -20,22 +20,26 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bachmann.nfcsound.infra.DataManager;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 
-public class StatusActivity extends AppCompatActivity {
+public class ExplorerGameActivity extends AppCompatActivity {
 
     private static final String TAG_NFC = "NFC TAG";
-    private static final String TAG_ACTIVITY = "StatusActivity";
+    private static final String TAG_ACTIVITY = "ExplorerGameActivity";
 
+    private AppStatus status;
     private NfcAdapter nfcAdapter;
     private NFCSoundManager manager;
 
-    private ImageView image;
+    private ImageView displayed_image;
+    private TextView displayed_name;
 
     PendingIntent pendingIntent;
     Tag myTag;
@@ -43,20 +47,19 @@ public class StatusActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_status);
+        setContentView(R.layout.activity_explorer_game);
         this.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 
+        status = ((AppContainer) getApplicationContext()).getStatus();
+        DataManager dm = ((AppContainer)getApplicationContext()).getDataManager();
+        manager = new NFCSoundManager(getResources(), dm);
 
-        manager = ((NFCSoundManager)getApplicationContext());
+        displayed_image = findViewById(R.id.ivImage);
+        displayed_name = findViewById(R.id.tvName);
 
-        image = findViewById(R.id.ivImage);
+        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         setupNFC();
-
-        if (!manager.isInitialized()) {
-            manager.initializeApplication();
-            pinApp();
-        }
 
         showImage();
     }
@@ -77,31 +80,19 @@ public class StatusActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (status.isAppLocked()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
     private void setupNFC() {
-
-        nfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        if (nfcAdapter == null) {
-            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
-            finish();
-        }
-        else if(!nfcAdapter.isEnabled()){
-            Toast.makeText(this,
-                    "NFC NOT Enabled!",
-                    Toast.LENGTH_LONG).show();
-
-            startActivity(new Intent(android.provider.Settings.ACTION_NFC_SETTINGS));
-        }
-
-        readFromIntent(getIntent());
 
         pendingIntent = PendingIntent.getActivity(this, 0, new Intent(this, getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);
         IntentFilter tagDetected = new IntentFilter(NfcAdapter.ACTION_TAG_DISCOVERED);
         tagDetected.addCategory(Intent.CATEGORY_DEFAULT);
-    }
-
-
-    private void pinApp() {
-        startLockTask();
     }
 
 
@@ -112,16 +103,22 @@ public class StatusActivity extends AppCompatActivity {
             Toast.makeText(this, e.toString(),Toast.LENGTH_SHORT).show();
         }
 
+        showName();
         showImage();
     }
 
     public void showImage() {
         try {
             String path = manager.getImagePathToShow();
-            image.setImageBitmap(getBitmapFromAssets(path));
+            displayed_image.setImageBitmap(getBitmapFromAssets(path));
         } catch (Exception e) {
             Toast.makeText(this, e.toString(),Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public void showName() {
+        String n = manager.getNameToShow();
+        displayed_name.setText(n);
     }
 
     private Bitmap getBitmapFromAssets(String fileName) throws IOException {
@@ -137,56 +134,20 @@ public class StatusActivity extends AppCompatActivity {
     @Override
     protected void onNewIntent(Intent intent) {
         setIntent(intent);
-        readFromIntent(intent);
-        if(NfcAdapter.ACTION_TAG_DISCOVERED.equals(intent.getAction())){
-            myTag = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);
-        }
+        processIntent(intent);
     }
 
+    void processIntent(Intent intent) {
+        Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
+        // only one message sent during the beam
+        NdefMessage msg = (NdefMessage) rawMsgs[0];
 
+        String name = new String(msg.getRecords()[0].getPayload());
 
-    private void readFromIntent(Intent intent) {
-        String action = intent.getAction();
-        if (NfcAdapter.ACTION_TAG_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_TECH_DISCOVERED.equals(action)
-                || NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
-            Parcelable[] rawMsgs = intent.getParcelableArrayExtra(NfcAdapter.EXTRA_NDEF_MESSAGES);
-            NdefMessage[] msgs = null;
-            if (rawMsgs != null) {
-                msgs = new NdefMessage[rawMsgs.length];
-                for (int i = 0; i < rawMsgs.length; i++) {
-                    msgs[i] = (NdefMessage) rawMsgs[i];
-                }
-            }
-            buildTagViews(msgs);
-        }
-    }
-    private void buildTagViews(NdefMessage[] msgs) {
-        if (msgs == null || msgs.length == 0) return;
+        //Toast.makeText(ExplorerGameActivity.this, "NFC Content: " + name,Toast.LENGTH_LONG).show();
+        Log.i(TAG_NFC, "NFC Content: " + name );
 
-        String text = "";
-        byte[] payload = msgs[0].getRecords()[0].getPayload();
-        String textEncoding = ((payload[0] & 128) == 0) ? "UTF-8" : "UTF-16"; // Get the Text Encoding
-        int languageCodeLength = payload[0] & 0063; // Get the Language Code, e.g. "en"
-        // String languageCode = new String(payload, 1, languageCodeLength, "US-ASCII");
-        languageCodeLength=0;
-        try {
-            // Get the Text
-            //text = new String(payload, languageCodeLength+1 , payload.length - languageCodeLength - 1, textEncoding);
-            text = new String(payload, languageCodeLength, payload.length - languageCodeLength, textEncoding);
-        } catch (UnsupportedEncodingException e) {
-            Log.e(TAG_NFC,"UnsupportedEncoding: "+ e.toString());
-        } catch (StringIndexOutOfBoundsException e) {
-            Log.e(TAG_NFC,"Error while putting payload into string: "+ e.toString() + ", " + payload);
-            Log.e(TAG_NFC,"LanguageCodeLength: " + languageCodeLength);
-            Log.e(TAG_NFC,"TextEncoding: " + textEncoding);
-            Log.e(TAG_NFC,"PayloadLength: " + payload.length);
-        }
-
-        Toast.makeText(StatusActivity.this, "NFC Content: " + text,Toast.LENGTH_LONG).show();
-        Log.e(TAG_NFC, "NFC Content: " + text );
-
-        tagDetected(text);
+        tagDetected(name);
     }
 
 
@@ -223,7 +184,7 @@ public class StatusActivity extends AppCompatActivity {
     }
 
     private void showRecentPlaylistSelection(){
-        AlertDialog.Builder builder = new AlertDialog.Builder(StatusActivity.this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(ExplorerGameActivity.this);
         builder.setTitle(R.string.RecentlyPlayedDialogTitel)
                 .setItems(manager.getRecentlyPlayed(), new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {

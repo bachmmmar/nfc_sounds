@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- ExplorerGameActivity -->
+    <string name="Button_recent" translatable="false">Last Sounds</string>
+    <string name="RecentlyPlayedDialogTitel" translatable="false">Chose sound to play</string>
+
+    <!-- IntroductionActivity -->
+    <string name="Switch_enableNFC" translatable="false">Enable NFC</string>
+    <string name="Switch_enablePinning" translatable="false">Pin App</string>
+    <string name="Button_startGame" translatable="false">Start Game</string>
+    <string name="Button_writeCards" translatable="false">Write NFC Cards</string>
+    <string name="NFC_instruction" translatable="false">Please activate/deactivate NFC and press Back to return to the application!</string>
+    <string name="NFC_disabled" translatable="false">NFC need to be enabled in order to proceed!</string>
+    <string name="Allert_NFCNotSupported_title" translatable="false">NFC Support</string>
+    <string name="Allert_NFCNotSupported_text" translatable="false">This device does not support NFC.</string>
+    <string name="Allert_NFCNotSupported_okButton" translatable="false">OK</string>
+
+    <!-- WriteCardActivity -->
+    <string name="Button_next" translatable="false">Next item</string>
+    <string name="Label_hint" translatable="false">Hold the NFC card to the back of the device to write identification.</string>
+    <string name="Label_currentItem" translatable="false">-</string>
+
+    <string name="Hint_tagNotWritable" translatable="false">This tag is not writable</string>
+    <string name="Hint_tagNotSupported" translatable="false">This tag type is not supported</string>
+    <string name="Hint_tagNotSupportNDEF" translatable="false">Tag doesn\'t support NDEF.</string>
+    <string name="Hint_tagReadOnly" translatable="false">Tag is read-only</string>
+    <string name="Hint_tagFormatFailed" translatable="false">Failed to format tag.</string>
+    <string name="Hint_tagWriteFailed" translatable="false">Failed to write tag</string>
+    <string name="Hint_tagReadFailed" translatable="false">Failed to read tag</string>
+    <string name="Hint_tagToLessCapacity" translatable="false">Tag capacity is to small</string>
+    <string name="Hint_tagWriteSuccessful" translatable="false">Tag writing succeeded!</string>
+    <string name="Hint_tagWriteSuccessfulWithFormat" translatable="false">Tag formating and writing succeeded!</string>
+</resources>

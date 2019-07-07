@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="bear">Bear</string>
+    <string name="car">Car</string>
+    <string name="cat">Cat</string>
+    <string name="chicken">Chicken</string>
+    <string name="cow">Cow</string>
+    <string name="dog">Dog</string>
+    <string name="elephant">Elephant</string>
+    <string name="frog">Frog</string>
+    <string name="harvester">Harvester</string>
+    <string name="horse">Horse</string>
+    <string name="lion">Lion</string>
+    <string name="motorbike">Motorbike</string>
+    <!-- <string name="nothing"></string> -->
+    <string name="pig">Pig</string>
+    <string name="sheep">Sheep</string>
+    <string name="snake">Snake</string>
+    <string name="tiger">Tiger</string>
+    <string name="tractor">Tractor</string>
+    <string name="wolf">Wolf</string>
+</resources>

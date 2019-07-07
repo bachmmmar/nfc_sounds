@@ -1,7 +1,7 @@
 package com.bachmann.nfcsound;
 
-import android.app.Application;
 import android.content.res.AssetFileDescriptor;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.util.Log;
@@ -11,14 +11,15 @@ import com.bachmann.nfcsound.infra.DataPaths;
 import com.bachmann.nfcsound.infra.SizeLimitedList;
 
 
-public class NFCSoundManager extends Application {
+public class NFCSoundManager {
 
     public static final int PLAYLIST_HISTORY_SIZE = 6;
-    private static final String BASE_ASSETS_PATH = "nfc_name";
+
     private static final String DEFAULT_TAG_TEXT = "nothing";
 
     private boolean is_initialized = false;
     private boolean delayed_playing = false;
+    private Resources resources;
     private MediaPlayer media;
     private DataManager data_manager;
 
@@ -26,19 +27,20 @@ public class NFCSoundManager extends Application {
 
     private SizeLimitedList last_played = new SizeLimitedList(PLAYLIST_HISTORY_SIZE);
 
-    @Override
-    public void onCreate () {
-        super.onCreate();
 
-        data_manager = new DataManager(getResources(), BASE_ASSETS_PATH);
+    public NFCSoundManager (Resources res, DataManager dm) {
+        resources = res;
+        data_manager = dm;
         media = new MediaPlayer();
-        active_name = data_manager.find(DEFAULT_TAG_TEXT);
+        active_name = data_manager.find(DEFAULT_TAG_TEXT).getNext();
     }
 
+    @Deprecated
     public boolean isInitialized() {
         return is_initialized;
     }
 
+    @Deprecated
     public void initializeApplication() {
         is_initialized = true;
     }
@@ -49,10 +51,10 @@ public class NFCSoundManager extends Application {
         }
 
         try {
-            active_name = data_manager.find(text);
+            active_name = data_manager.find(text).getNext();
             last_played.add(text);
         } catch (Exception e) {
-            active_name = data_manager.find(DEFAULT_TAG_TEXT);
+            active_name = data_manager.find(DEFAULT_TAG_TEXT).getNext();
             throw e;
         } finally {
             delayedPlayVoice();
@@ -82,7 +84,7 @@ public class NFCSoundManager extends Application {
         }
         try {
             media = new MediaPlayer();
-            AssetFileDescriptor descriptor = getResources().getAssets().openFd(active_name.getVoicePath());
+            AssetFileDescriptor descriptor = resources.getAssets().openFd(active_name.getVoicePath());
             media.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength() );
             descriptor.close();
             media.prepare();
@@ -104,7 +106,7 @@ public class NFCSoundManager extends Application {
         }
         try{
             media = new MediaPlayer();
-            AssetFileDescriptor descriptor = getResources().getAssets().openFd(active_name.getSoundPath());
+            AssetFileDescriptor descriptor = resources.getAssets().openFd(active_name.getSoundPath());
             media.setDataSource(descriptor.getFileDescriptor(), descriptor.getStartOffset(), descriptor.getLength() );
             descriptor.close();
             media.prepare();
@@ -118,6 +120,10 @@ public class NFCSoundManager extends Application {
 
     public String getImagePathToShow() {
         return active_name.getImagePath();
+    }
+
+    public String getNameToShow() {
+        return active_name.getName();
     }
 
     public String[] getRecentlyPlayed() {
