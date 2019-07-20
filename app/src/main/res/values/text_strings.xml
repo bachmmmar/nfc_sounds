@@ -3,6 +3,7 @@
     <!-- ExplorerGameActivity -->
     <string name="Button_recent" translatable="false">Last Sounds</string>
     <string name="RecentlyPlayedDialogTitel" translatable="false">Chose sound to play</string>
+    <string name="IntroductionText" translatable="false">Touch the back of your phone with a NFC card</string>
 
     <!-- IntroductionActivity -->
     <string name="Switch_enableNFC" translatable="false">Enable NFC</string>
