@@ -61,6 +61,7 @@ public class ExplorerGameActivity extends AppCompatActivity {
 
         setupNFC();
 
+        displayed_name.setText(getString(R.string.IntroductionText));
         showImage();
     }
 

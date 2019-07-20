@@ -71,3 +71,9 @@ Add a screen which allows the user to:
 
 ## Mögliche Bravos:
 Klatschen, Tanzende Tiere, Lustige Videos
+
+
+# Details
+
+## Release
+To create a release go to 'Build' choose 'Generate Signed Bundle / APK...' and create a 'Android App Bundle'. After successful build the bundle is located in 'app/release/release/'.
