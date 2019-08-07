@@ -76,4 +76,5 @@ Klatschen, Tanzende Tiere, Lustige Videos
 # Details
 
 ## Release
+First increase versionCode and versionName in the app build.gradle file.
 To create a release go to 'Build' choose 'Generate Signed Bundle / APK...' and create a 'Android App Bundle'. After successful build the bundle is located in 'app/release/release/'.
